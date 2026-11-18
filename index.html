@@ -1,0 +1,1189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreightFlow | Logistics Management</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+    --navy:#172b3a;
+    --navy-light:#203c50;
+    --teal:#087f8c;
+    --teal-light:#e6f5f5;
+    --orange:#f3a712;
+    --bg:#f5f7fa;
+    --white:#fff;
+    --text:#253746;
+    --muted:#82909c;
+    --border:#e9edf1;
+    --green:#16865c;
+    --red:#d94b4b;
+    --shadow:0 5px 20px rgba(26,45,60,.05);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh;width:100%}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    background:var(--navy);
+    color:white;
+    position:fixed;
+    inset:0 auto 0 0;
+    display:flex;
+    flex-direction:column;
+    padding:26px 17px;
+    z-index:20;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 10px 35px;
+}
+
+.brand-icon{
+    width:42px;height:42px;
+    background:var(--orange);
+    color:var(--navy);
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    font-size:20px;
+}
+
+.brand h2{
+    font-family:'Manrope',sans-serif;
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.brand small{
+    display:block;
+    font-size:10px;
+    color:#aebdca;
+    letter-spacing:1.5px;
+    margin-top:2px;
+}
+
+.nav-label{
+    font-size:10px;
+    color:#91a5b5;
+    font-weight:700;
+    letter-spacing:1.5px;
+    padding:0 12px;
+    margin:15px 0 10px;
+}
+
+.nav-link{
+    border:0;
+    background:transparent;
+    color:#b9c7d1;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    width:100%;
+    padding:13px 14px;
+    border-radius:10px;
+    text-align:left;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:4px;
+    transition:.2s;
+}
+
+.nav-link i{width:18px;font-size:15px}
+.nav-link:hover,.nav-link.active{
+    background:#29475b;
+    color:white;
+}
+.nav-link.active{box-shadow:inset 3px 0 var(--orange)}
+
+.sidebar-bottom{margin-top:auto}
+.help-card{
+    background:#223e52;
+    border-radius:13px;
+    padding:16px;
+    margin:20px 3px;
+}
+.help-card p{font-size:12px;color:#c0cdd6;line-height:1.6;margin:8px 0 12px}
+.help-card button{
+    background:var(--orange);
+    color:var(--navy);
+    border:0;
+    border-radius:7px;
+    padding:9px 12px;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.topbar{
+    height:76px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 34px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.top-left{display:flex;align-items:center;gap:14px}
+.topbar h3{font-family:'Manrope';font-size:17px}
+.topbar small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+
+.top-actions{display:flex;align-items:center;gap:18px}
+.icon-btn{
+    border:0;background:#f3f6f8;
+    width:38px;height:38px;border-radius:10px;
+    color:#526474;
+}
+.profile-mini{display:flex;align-items:center;gap:10px}
+.avatar{
+    width:39px;height:39px;border-radius:50%;
+    background:#d9eeee;color:var(--teal);
+    display:grid;place-items:center;font-weight:800;
+}
+.profile-mini strong{font-size:12px;display:block}
+.profile-mini small{font-size:10px;color:var(--muted)}
+
+.content{
+    padding:30px 34px 45px;
+    width:100%;
+    max-width:1600px;
+    margin:0 auto;
+}
+
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{
+    from{opacity:0;transform:translateY(5px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.page-heading{
+    display:flex;justify-content:space-between;
+    align-items:center;gap:15px;flex-wrap:wrap;
+    margin-bottom:25px;
+}
+.page-heading h1{
+    font-family:'Manrope';font-size:25px;
+    letter-spacing:-.8px;
+}
+.page-heading p{color:var(--muted);font-size:12px;margin-top:6px}
+
+.primary-btn,.secondary-btn{
+    border:0;border-radius:9px;padding:12px 17px;
+    font-size:12px;font-weight:700;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:.2s;
+}
+.primary-btn{background:var(--teal);color:white}
+.primary-btn:hover{background:#066b75;transform:translateY(-1px)}
+.secondary-btn{background:white;border:1px solid var(--border);color:var(--text)}
+.secondary-btn:hover{background:#f5f8fa}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:17px;
+    margin-bottom:24px;
+}
+.stat-card{
+    background:white;border:1px solid var(--border);
+    border-radius:14px;padding:20px;
+    box-shadow:var(--shadow);
+}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-icon{
+    width:40px;height:40px;border-radius:11px;
+    display:grid;place-items:center;font-size:16px;
+}
+.stat-icon.teal{background:#e4f5f5;color:#087f8c}
+.stat-icon.orange{background:#fff3db;color:#d18b08}
+.stat-icon.green{background:#e4f5ed;color:#16865c}
+.stat-icon.purple{background:#f0eafa;color:#8060b3}
+.stat-card h2{font-family:'Manrope';font-size:27px;margin:17px 0 3px}
+.stat-card p{font-size:11px;color:var(--muted)}
+.stat-change{font-size:10px;color:var(--green);font-weight:700}
+
+.panel{
+    background:white;border:1px solid var(--border);
+    border-radius:14px;padding:21px;
+    box-shadow:var(--shadow);
+    min-width:0;
+}
+.panel-heading{
+    display:flex;align-items:center;
+    justify-content:space-between;gap:12px;
+    margin-bottom:18px;
+}
+.panel-heading h3{font-family:'Manrope';font-size:15px}
+.panel-heading p{font-size:11px;color:var(--muted);margin-top:4px}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);
+    gap:18px;
+    margin-bottom:20px;
+}
+
+.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.quick-action{
+    padding:15px 12px;border:1px solid var(--border);
+    border-radius:11px;background:white;text-align:left;
+    transition:.2s;
+}
+.quick-action:hover{border-color:var(--teal);background:#f7fcfc}
+.quick-action i{color:var(--teal);font-size:17px;margin-bottom:12px}
+.quick-action strong{display:block;font-size:12px}
+.quick-action small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+
+/* TABLES */
+
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th{
+    text-align:left;color:var(--muted);
+    font-size:10px;text-transform:uppercase;
+    letter-spacing:.7px;font-weight:700;
+    padding:13px 12px;background:#f8fafb;
+}
+td{padding:14px 12px;border-bottom:1px solid #eef1f3;font-size:11px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fbfdfd}
+.id-text{font-weight:800;color:var(--teal)}
+.muted{color:var(--muted)}
+.status{
+    display:inline-block;padding:6px 9px;
+    border-radius:20px;font-size:10px;font-weight:700;
+    white-space:nowrap;
+}
+.status.transit{background:#fff3db;color:#a56d00}
+.status.delivered{background:#e5f5ed;color:#16865c}
+.status.pending{background:#f0eafa;color:#8060b3}
+.status.cancelled{background:#fceaea;color:#c34a4a}
+.status.paid{background:#e5f5ed;color:#16865c}
+.status.unpaid{background:#fff3db;color:#a56d00}
+
+.search-box{
+    display:flex;align-items:center;gap:9px;
+    background:#f6f8fa;border:1px solid var(--border);
+    border-radius:9px;padding:10px 12px;
+    min-width:220px;
+}
+.search-box i{color:var(--muted);font-size:12px}
+.search-box input{border:0;outline:0;background:transparent;width:100%;font-size:11px}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:17px}
+
+/* FORMS */
+
+.form-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:17px;
+}
+.form-group{display:flex;flex-direction:column;gap:7px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:11px;font-weight:700;color:#526474}
+.form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:12px 13px;
+    border:1px solid #e2e8ed;border-radius:9px;
+    outline:0;background:white;color:var(--text);
+    font-size:12px;transition:.2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px #087f8c14;
+}
+.form-group textarea{resize:vertical;min-height:85px}
+.form-section{margin-bottom:25px}
+.form-section h3{font-size:13px;margin-bottom:15px}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+/* TRACKING */
+
+.track-search{
+    display:flex;gap:10px;max-width:650px;
+}
+.track-search input{
+    flex:1;min-width:0;padding:14px;
+    border:1px solid var(--border);border-radius:9px;outline:0;
+}
+.tracking-result{margin-top:22px}
+.track-route{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:15px;margin:20px 0;
+}
+.route-box{background:#f7f9fa;padding:17px;border-radius:11px}
+.route-box small{color:var(--muted);font-size:10px}
+.route-box h3{font-size:14px;margin-top:7px}
+.timeline{margin:20px 0 5px;padding-left:8px}
+.timeline-item{
+    position:relative;padding:0 0 24px 32px;
+    border-left:2px solid #e5ecef;margin-left:8px;
+}
+.timeline-item:last-child{border-left-color:transparent}
+.timeline-item:before{
+    content:"";position:absolute;left:-7px;top:0;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--teal);border:2px solid white;
+    box-shadow:0 0 0 2px #d9eeee;
+}
+.timeline-item strong{font-size:12px}
+.timeline-item p{font-size:10px;color:var(--muted);margin-top:5px}
+
+/* PROFILE */
+
+.profile-layout{
+    display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;
+}
+.profile-card{text-align:center;padding:28px 20px}
+.profile-avatar{
+    width:85px;height:85px;border-radius:50%;
+    margin:0 auto 15px;background:#dff2f1;
+    color:var(--teal);display:grid;place-items:center;
+    font-size:30px;font-weight:800;
+}
+.profile-card h3{font-size:16px}
+.profile-card p{font-size:11px;color:var(--muted);margin-top:5px}
+.profile-info{
+    border-top:1px solid var(--border);
+    margin-top:20px;padding-top:17px;text-align:left;
+}
+.profile-info div{display:flex;justify-content:space-between;gap:8px;margin:11px 0;font-size:11px}
+.profile-info span{color:var(--muted)}
+
+/* EMPTY STATE & TOAST */
+
+.empty-state{text-align:center;padding:35px 15px;color:var(--muted)}
+.empty-state i{font-size:28px;margin-bottom:12px;color:#b7c6ce}
+.empty-state p{font-size:12px}
+.toast{
+    position:fixed;right:25px;bottom:25px;
+    background:var(--navy);color:white;
+    padding:13px 18px;border-radius:10px;
+    font-size:12px;box-shadow:var(--shadow);
+    opacity:0;transform:translateY(15px);
+    pointer-events:none;transition:.3s;z-index:100;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.mobile-menu{display:none}
+
+/* RESPONSIVE LAPTOP / TABLET */
+
+@media(max-width:1100px){
+    .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .dashboard-grid{grid-template-columns:1fr}
+    .content{padding:25px}
+}
+
+@media(max-width:760px){
+    .sidebar{display:none}
+    .main{margin-left:0;width:100%;padding-bottom:75px}
+    .topbar{height:65px;padding:0 16px}
+    .topbar h3{font-size:15px}
+    .topbar .top-subtitle{display:none}
+    .content{padding:21px 15px 30px}
+    .page-heading h1{font-size:22px}
+    .stats-grid{gap:10px}
+    .stat-card{padding:15px}
+    .stat-card h2{font-size:23px}
+    .stat-icon{width:35px;height:35px}
+    .profile-mini .profile-details{display:none}
+    .top-actions{gap:10px}
+    .mobile-menu{
+        display:flex;position:fixed;bottom:0;left:0;right:0;
+        height:68px;background:white;border-top:1px solid var(--border);
+        justify-content:space-around;align-items:center;
+        z-index:30;padding:5px 3px env(safe-area-inset-bottom);
+    }
+    .mobile-menu button{
+        background:transparent;border:0;color:#8a98a4;
+        display:flex;flex-direction:column;align-items:center;
+        gap:5px;font-size:9px;font-weight:700;min-width:48px;
+    }
+    .mobile-menu button i{font-size:17px}
+    .mobile-menu button.active{color:var(--teal)}
+    .form-grid{grid-template-columns:1fr}
+    .form-group.full{grid-column:auto}
+    .profile-layout{grid-template-columns:1fr}
+    .track-search{flex-direction:column}
+    .track-search button{justify-content:center}
+    .track-route{grid-template-columns:1fr 1fr}
+    .panel{padding:16px}
+    .search-box{min-width:100%}
+    .toolbar{width:100%}
+    .page-heading .primary-btn{width:100%;justify-content:center}
+}
+
+@media(max-width:390px){
+    .stats-grid{grid-template-columns:1fr 1fr}
+    .stat-card h2{font-size:21px}
+    .stat-card{padding:12px}
+    .quick-actions{grid-template-columns:1fr 1fr}
+    .track-route{grid-template-columns:1fr}
+    .page-heading h1{font-size:20px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div>
+            <h2>FreightFlow</h2>
+            <small>LOGISTICS PORTAL</small>
+        </div>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-link active" data-page="dashboard"><i class="fa-solid fa-house"></i> Dashboard</button>
+    <button class="nav-link" data-page="shipments"><i class="fa-solid fa-boxes-stacked"></i> Shipments</button>
+    <button class="nav-link" data-page="tracking"><i class="fa-solid fa-location-dot"></i> Track Shipment</button>
+    <button class="nav-link" data-page="neworder"><i class="fa-solid fa-circle-plus"></i> New Order</button>
+
+    <div class="nav-label">MANAGEMENT</div>
+    <button class="nav-link" data-page="history"><i class="fa-solid fa-clock-rotate-left"></i> Shipment History</button>
+    <button class="nav-link" data-page="transactions"><i class="fa-solid fa-wallet"></i> Transactions</button>
+    <button class="nav-link" data-page="profile"><i class="fa-solid fa-user"></i> My Profile</button>
+
+    <div class="sidebar-bottom">
+        <div class="help-card">
+            <i class="fa-solid fa-headset"></i>
+            <p>Need help with a shipment? Our support team is here to help.</p>
+            <button onclick="showToast('Support contact: support@freightflow.demo')">Contact Support</button>
+        </div>
+        <button class="nav-link" onclick="showToast('You are using the demo version.')">
+            <i class="fa-solid fa-circle-info"></i> About FreightFlow
+        </button>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+    <header class="topbar">
+        <div class="top-left">
+            <div>
+                <h3 id="topTitle">Dashboard</h3>
+                <small class="top-subtitle">Welcome back! Here's what's happening today.</small>
+            </div>
+        </div>
+        <div class="top-actions">
+            <button class="icon-btn" onclick="showToast('You are all caught up!')" title="Notifications">
+                <i class="fa-regular fa-bell"></i>
+            </button>
+            <div class="profile-mini">
+                <div class="avatar" id="topAvatar">N</div>
+                <div class="profile-details">
+                    <strong id="topName">Nandhakishore</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+
+    <!-- DASHBOARD -->
+    <section class="page active" id="dashboard">
+        <div class="page-heading">
+            <div>
+                <h1>Good day! 👋</h1>
+                <p>Here's a quick overview of your logistics operations.</p>
+            </div>
+            <button class="primary-btn" onclick="navigate('neworder')">
+                <i class="fa-solid fa-plus"></i> Create New Order
+            </button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div><p>Total Shipments</p></div>
+                    <div class="stat-icon teal"><i class="fa-solid fa-box"></i></div>
+                </div>
+                <h2 id="totalCount">0</h2>
+                <span class="stat-change">All registered orders</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top">
+                    <p>In Transit</p>
+                    <div class="stat-icon orange"><i class="fa-solid fa-truck"></i></div>
+                </div>
+                <h2 id="transitCount">0</h2>
+                <span class="stat-change">Currently on the way</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top">
+                    <p>Delivered</p>
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <h2 id="deliveredCount">0</h2>
+                <span class="stat-change">Successfully completed</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top">
+                    <p>Total Revenue</p>
+                    <div class="stat-icon purple"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                </div>
+                <h2 id="revenueCount">₹0</h2>
+                <span class="stat-change">Recorded payments</span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Recent Shipments</h3>
+                        <p>Latest orders in your system</p>
+                    </div>
+                    <button class="secondary-btn" onclick="navigate('shipments')">View all</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Shipment ID</th><th>Customer</th><th>Destination</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="recentTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading">
+                    <div><h3>Quick Actions</h3><p>Get things done faster</p></div>
+                </div>
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="navigate('neworder')">
+                        <i class="fa-solid fa-plus"></i>
+                        <strong>New Shipment</strong>
+                        <small>Create an order</small>
+                    </button>
+                    <button class="quick-action" onclick="navigate('tracking')">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                        <strong>Track Order</strong>
+                        <small>Check delivery status</small>
+                    </button>
+                    <button class="quick-action" onclick="navigate('transactions')">
+                        <i class="fa-solid fa-wallet"></i>
+                        <strong>Payments</strong>
+                        <small>Manage transactions</small>
+                    </button>
+                    <button class="quick-action" onclick="navigate('profile')">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <strong>My Profile</strong>
+                        <small>Update your details</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHIPMENTS -->
+    <section class="page" id="shipments">
+        <div class="page-heading">
+            <div><h1>Shipments</h1><p>Manage and monitor all your shipments.</p></div>
+            <button class="primary-btn" onclick="navigate('neworder')"><i class="fa-solid fa-plus"></i> New Shipment</button>
+        </div>
+        <div class="panel">
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input id="shipmentSearch" placeholder="Search ID, customer or destination..." oninput="renderShipments()">
+                </div>
+                <select class="secondary-btn" id="statusFilter" onchange="renderShipments()">
+                    <option value="all">All statuses</option>
+                    <option value="In Transit">In Transit</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Shipment ID</th><th>Customer</th><th>Destination</th><th>Date</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="shipmentTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRACKING -->
+    <section class="page" id="tracking">
+        <div class="page-heading">
+            <div><h1>Track Your Shipment</h1><p>Enter a shipment ID to see its latest status.</p></div>
+        </div>
+        <div class="panel">
+            <div class="track-search">
+                <input id="trackingInput" placeholder="Example: FF-1001">
+                <button class="primary-btn" onclick="trackShipment()"><i class="fa-solid fa-magnifying-glass"></i> Track Shipment</button>
+            </div>
+            <div id="trackingResult" class="tracking-result">
+                <div class="empty-state">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <p>Your shipment journey will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW ORDER -->
+    <section class="page" id="neworder">
+        <div class="page-heading">
+            <div><h1>Create New Order</h1><p>Enter the details below to register a new shipment.</p></div>
+        </div>
+        <div class="panel">
+            <form id="orderForm">
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-user" style="color:var(--teal)"></i> Customer Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Customer Name *</label>
+                            <input name="customer" required placeholder="Enter customer name">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input name="phone" required type="tel" placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input name="email" type="email" placeholder="customer@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Date *</label>
+                            <input name="date" type="date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-route" style="color:var(--teal)"></i> Shipment Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Pickup Location *</label>
+                            <input name="origin" required placeholder="e.g. Coimbatore">
+                        </div>
+                        <div class="form-group">
+                            <label>Delivery Location *</label>
+                            <input name="destination" required placeholder="e.g. Chennai">
+                        </div>
+                        <div class="form-group">
+                            <label>Goods Description *</label>
+                            <input name="goods" required placeholder="e.g. Electronic items">
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg) *</label>
+                            <input name="weight" type="number" min="0.1" step="0.1" required placeholder="Enter weight">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-credit-card" style="color:var(--teal)"></i> Payment Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Shipping Amount (₹) *</label>
+                            <input name="amount" type="number" min="0" required placeholder="Enter amount">
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select name="method">
+                                <option>UPI</option><option>Cash</option>
+                                <option>Card</option><option>Bank Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Status</label>
+                            <select name="payment">
+                                <option>Unpaid</option><option>Paid</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shipment Status</label>
+                            <select name="status">
+                                <option>Pending</option><option>In Transit</option>
+                                <option>Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="secondary-btn" onclick="navigate('shipments')">Cancel</button>
+                    <button type="submit" class="primary-btn"><i class="fa-solid fa-check"></i> Create Shipment</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="page" id="history">
+        <div class="page-heading">
+            <div><h1>Shipment History</h1><p>View your completed and past shipments.</p></div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading">
+                <div><h3>Completed Deliveries</h3><p>Shipments marked as delivered</p></div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Shipment ID</th><th>Customer</th><th>Route</th><th>Delivery Date</th><th>Amount</th><th>Status</th></tr></thead>
+                    <tbody id="historyTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRANSACTIONS -->
+    <section class="page" id="transactions">
+        <div class="page-heading">
+            <div><h1>Transactions</h1><p>Keep track of shipment payments and billing.</p></div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-top"><p>Total Billed</p><div class="stat-icon teal"><i class="fa-solid fa-file-invoice"></i></div></div>
+                <h2 id="billedTotal">₹0</h2><span class="stat-change">All recorded transactions</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top"><p>Paid Amount</p><div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div></div>
+                <h2 id="paidTotal">₹0</h2><span class="stat-change">Successfully paid</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top"><p>Pending Amount</p><div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div></div>
+                <h2 id="pendingTotal">₹0</h2><span class="stat-change">Awaiting payment</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-top"><p>Transactions</p><div class="stat-icon purple"><i class="fa-solid fa-receipt"></i></div></div>
+                <h2 id="transactionCount">0</h2><span class="stat-change">Total records</span>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading"><div><h3>Payment Records</h3><p>Shipment-wise transaction history</p></div></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Transaction ID</th><th>Shipment ID</th><th>Customer</th><th>Method</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="transactionTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="page" id="profile">
+        <div class="page-heading">
+            <div><h1>My Profile</h1><p>Manage your account information.</p></div>
+        </div>
+        <div class="profile-layout">
+            <div class="panel profile-card">
+                <div class="profile-avatar" id="profileAvatar">N</div>
+                <h3 id="profileDisplayName">Nandhakishore</h3>
+                <p>Administrator</p>
+                <div class="profile-info">
+                    <div><span>Account type</span><strong>Admin</strong></div>
+                    <div><span>Platform</span><strong>FreightFlow</strong></div>
+                    <div><span>Account status</span><strong style="color:var(--green)">Active</strong></div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading"><div><h3>Personal Information</h3><p>Update your personal details below.</p></div></div>
+                <form id="profileForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input id="profileName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input id="profileEmail" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input id="profilePhone" type="tel">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input id="profileCompany" placeholder="Your company">
+                        </div>
+                        <div class="form-group full">
+                            <label>Address</label>
+                            <textarea id="profileAddress" placeholder="Enter your address"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="primary-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    </div>
+</main>
+</div>
+
+<!-- MOBILE NAVIGATION -->
+<nav class="mobile-menu">
+    <button class="active" data-page="dashboard"><i class="fa-solid fa-house"></i>Home</button>
+    <button data-page="shipments"><i class="fa-solid fa-boxes-stacked"></i>Shipments</button>
+    <button data-page="tracking"><i class="fa-solid fa-location-dot"></i>Track</button>
+    <button data-page="neworder"><i class="fa-solid fa-plus-circle"></i>New Order</button>
+    <button data-page="profile"><i class="fa-solid fa-user"></i>Profile</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE = {
+    shipments: "freightflow_shipments",
+    transactions: "freightflow_transactions",
+    profile: "freightflow_profile"
+};
+
+const demoShipments = [
+    {id:"FF-1001",customer:"Arun Kumar",phone:"9876543210",email:"arun@example.com",origin:"Coimbatore",destination:"Chennai",goods:"Electronics",weight:12,date:"2026-11-20",amount:2500,method:"UPI",payment:"Paid",status:"In Transit"},
+    {id:"FF-1002",customer:"Priya Sharma",phone:"9876543211",email:"priya@example.com",origin:"Chennai",destination:"Bangalore",goods:"Clothing",weight:8,date:"2026-11-16",amount:1800,method:"Card",payment:"Paid",status:"Delivered"},
+    {id:"FF-1003",customer:"Rahul Raj",phone:"9876543212",email:"rahul@example.com",origin:"Madurai",destination:"Coimbatore",goods:"Furniture",weight:30,date:"2026-11-23",amount:3200,method:"Cash",payment:"Unpaid",status:"Pending"},
+    {id:"FF-1004",customer:"Meena Devi",phone:"9876543213",email:"meena@example.com",origin:"Salem",destination:"Trichy",goods:"Food Products",weight:15,date:"2026-11-15",amount:1400,method:"UPI",payment:"Paid",status:"Delivered"}
+];
+
+let shipments = JSON.parse(localStorage.getItem(STORAGE.shipments) || "null") || demoShipments;
+let transactions = JSON.parse(localStorage.getItem(STORAGE.transactions) || "null");
+let profile = JSON.parse(localStorage.getItem(STORAGE.profile) || "null") || {
+    name:"Nandhakishore",
+    email:"admin@freightflow.demo",
+    phone:"",
+    company:"",
+    address:""
+};
+
+if(!transactions){
+    transactions = shipments.map((s,i)=>({
+        id:"TXN-"+String(1001+i),
+        shipmentId:s.id,
+        customer:s.customer,
+        method:s.method,
+        amount:Number(s.amount),
+        status:s.payment
+    }));
+}
+
+function saveData(){
+    localStorage.setItem(STORAGE.shipments,JSON.stringify(shipments));
+    localStorage.setItem(STORAGE.transactions,JSON.stringify(transactions));
+    localStorage.setItem(STORAGE.profile,JSON.stringify(profile));
+}
+
+function showToast(message){
+    const toast=document.getElementById("toast");
+    toast.textContent=message;
+    toast.classList.add("show");
+    clearTimeout(window.toastTimer);
+    window.toastTimer=setTimeout(()=>toast.classList.remove("show"),2800);
+}
+
+function navigate(page){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.querySelectorAll("[data-page]").forEach(b=>b.classList.remove("active"));
+
+    const target=document.getElementById(page);
+    if(!target)return;
+    target.classList.add("active");
+
+    document.querySelectorAll(`[data-page="${page}"]`).forEach(b=>b.classList.add("active"));
+
+    const titles={
+        dashboard:"Dashboard",shipments:"Shipments",tracking:"Track Shipment",
+        neworder:"New Order",history:"Shipment History",
+        transactions:"Transactions",profile:"My Profile"
+    };
+    document.getElementById("topTitle").textContent=titles[page]||"FreightFlow";
+
+    if(page==="dashboard")renderDashboard();
+    if(page==="shipments")renderShipments();
+    if(page==="history")renderHistory();
+    if(page==="transactions")renderTransactions();
+    if(page==="profile")renderProfile();
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll("[data-page]").forEach(button=>{
+    button.addEventListener("click",()=>navigate(button.dataset.page));
+});
+
+function money(value){
+    return "₹"+Number(value||0).toLocaleString("en-IN");
+}
+
+function statusBadge(status){
+    let cls="pending";
+    if(status==="Delivered"||status==="Paid")cls="delivered";
+    if(status==="In Transit")cls="transit";
+    if(status==="Cancelled")cls="cancelled";
+    if(status==="Unpaid")cls="unpaid";
+    return `<span class="status ${cls}">${status}</span>`;
+}
+
+function renderDashboard(){
+    document.getElementById("totalCount").textContent=shipments.length;
+    document.getElementById("transitCount").textContent=shipments.filter(s=>s.status==="In Transit").length;
+    document.getElementById("deliveredCount").textContent=shipments.filter(s=>s.status==="Delivered").length;
+
+    const revenue=transactions.filter(t=>t.status==="Paid").reduce((sum,t)=>sum+Number(t.amount),0);
+    document.getElementById("revenueCount").textContent=money(revenue);
+
+    const rows=shipments.slice(-5).reverse();
+    document.getElementById("recentTable").innerHTML=rows.length?rows.map(s=>`
+        <tr>
+            <td class="id-text">${s.id}</td>
+            <td>${escapeHTML(s.customer)}</td>
+            <td>${escapeHTML(s.destination)}</td>
+            <td>${statusBadge(s.status)}</td>
+        </tr>`).join(""):emptyRow(4,"No shipments yet");
+}
+
+function renderShipments(){
+    const query=(document.getElementById("shipmentSearch")?.value||"").toLowerCase();
+    const filter=document.getElementById("statusFilter")?.value||"all";
+
+    const list=shipments.filter(s=>{
+        const text=[s.id,s.customer,s.destination,s.origin].join(" ").toLowerCase();
+        return text.includes(query)&&(filter==="all"||s.status===filter);
+    });
+
+    document.getElementById("shipmentTable").innerHTML=list.length?list.map(s=>`
+        <tr>
+            <td class="id-text">${s.id}</td>
+            <td>${escapeHTML(s.customer)}</td>
+            <td>${escapeHTML(s.destination)}</td>
+            <td>${escapeHTML(s.date)}</td>
+            <td>${money(s.amount)}</td>
+            <td>${statusBadge(s.status)}</td>
+            <td><button class="secondary-btn" onclick="viewTracking('${s.id}')">View</button></td>
+        </tr>`).join(""):emptyRow(7,"No matching shipments found");
+}
+
+function renderHistory(){
+    const list=shipments.filter(s=>s.status==="Delivered");
+    document.getElementById("historyTable").innerHTML=list.length?list.map(s=>`
+        <tr>
+            <td class="id-text">${s.id}</td>
+            <td>${escapeHTML(s.customer)}</td>
+            <td>${escapeHTML(s.origin)} → ${escapeHTML(s.destination)}</td>
+            <td>${escapeHTML(s.date)}</td>
+            <td>${money(s.amount)}</td>
+            <td>${statusBadge(s.status)}</td>
+        </tr>`).join(""):emptyRow(6,"No completed deliveries yet");
+}
+
+function renderTransactions(){
+    const billed=transactions.reduce((a,t)=>a+Number(t.amount),0);
+    const paid=transactions.filter(t=>t.status==="Paid").reduce((a,t)=>a+Number(t.amount),0);
+
+    document.getElementById("billedTotal").textContent=money(billed);
+    document.getElementById("paidTotal").textContent=money(paid);
+    document.getElementById("pendingTotal").textContent=money(billed-paid);
+    document.getElementById("transactionCount").textContent=transactions.length;
+
+    document.getElementById("transactionTable").innerHTML=transactions.length?transactions.map(t=>`
+        <tr>
+            <td class="id-text">${t.id}</td>
+            <td>${t.shipmentId}</td>
+            <td>${escapeHTML(t.customer)}</td>
+            <td>${escapeHTML(t.method)}</td>
+            <td>${money(t.amount)}</td>
+            <td>${statusBadge(t.status)}</td>
+            <td>${t.status==="Paid"?"<span class='muted'>Completed</span>":`<button class="secondary-btn" onclick="markPaid('${t.id}')">Mark Paid</button>`}</td>
+        </tr>`).join(""):emptyRow(7,"No transactions available");
+}
+
+function markPaid(id){
+    const transaction=transactions.find(t=>t.id===id);
+    if(!transaction)return;
+
+    transaction.status="Paid";
+    const shipment=shipments.find(s=>s.id===transaction.shipmentId);
+    if(shipment)shipment.payment="Paid";
+
+    saveData();
+    renderTransactions();
+    renderDashboard();
+    showToast("Payment successfully marked as paid!");
+}
+
+function trackShipment(){
+    const id=document.getElementById("trackingInput").value.trim().toUpperCase();
+    showTrackingResult(id);
+}
+
+function viewTracking(id){
+    document.getElementById("trackingInput").value=id;
+    navigate("tracking");
+    showTrackingResult(id);
+}
+
+function showTrackingResult(id){
+    const result=document.getElementById("trackingResult");
+    const s=shipments.find(x=>x.id.toUpperCase()===id);
+
+    if(!s){
+        result.innerHTML=`<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><p>We couldn't find that shipment. Please check the ID and try again.</p></div>`;
+        return;
+    }
+
+    const steps=[
+        {name:"Order Registered",desc:"Your shipment has been registered in the system.",done:true},
+        {name:"Picked Up",desc:"The package has been collected from the sender.",done:s.status!=="Pending"},
+        {name:"In Transit",desc:"Your package is moving towards its destination.",done:s.status==="In Transit"||s.status==="Delivered"},
+        {name:"Delivered",desc:"The package has reached its destination.",done:s.status==="Delivered"}
+    ];
+
+    result.innerHTML=`
+        <div class="panel" style="margin-top:18px;background:#fbfdfd">
+            <div class="panel-heading">
+                <div><h3>Shipment ${s.id}</h3><p>Current delivery information</p></div>
+                ${statusBadge(s.status)}
+            </div>
+            <div class="track-route">
+                <div class="route-box"><small>FROM</small><h3>${escapeHTML(s.origin)}</h3></div>
+                <div class="route-box"><small>TO</small><h3>${escapeHTML(s.destination)}</h3></div>
+            </div>
+            <div class="form-grid">
+                <div><small class="muted">Customer</small><p style="font-size:12px;font-weight:700;margin-top:5px">${escapeHTML(s.customer)}</p></div>
+                <div><small class="muted">Expected / Delivery Date</small><p style="font-size:12px;font-weight:700;margin-top:5px">${escapeHTML(s.date)}</p></div>
+            </div>
+            <h3 style="font-size:13px;margin-top:25px">Shipment Journey</h3>
+            <div class="timeline">
+                ${steps.map(step=>`
+                    <div class="timeline-item" style="opacity:${step.done?1:.45}">
+                        <strong>${step.name}</strong>
+                        <p>${step.desc}</p>
+                    </div>`).join("")}
+            </div>
+        </div>`;
+}
+
+function emptyRow(columns,message){
+    return `<tr><td colspan="${columns}"><div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>${message}</p></div></td></tr>`;
+}
+
+function escapeHTML(value){
+    return String(value??"").replace(/[&<>"']/g,char=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[char]));
+}
+
+document.getElementById("orderForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(this).entries());
+
+    const id="FF-"+(1001+Math.max(0,...shipments.map(s=>Number(s.id.split("-")[1])||0))-1000);
+    const newId="FF-"+(1001+shipments.length+Math.max(0,...shipments.map(s=>Number(s.id.split("-")[1])||1001))-1001);
+
+    const shipment={
+        id:newId,
+        customer:data.customer,
+        phone:data.phone,
+        email:data.email,
+        origin:data.origin,
+        destination:data.destination,
+        goods:data.goods,
+        weight:Number(data.weight),
+        date:data.date,
+        amount:Number(data.amount),
+        method:data.method,
+        payment:data.payment,
+        status:data.status
+    };
+
+    shipments.push(shipment);
+    transactions.push({
+        id:"TXN-"+(1001+transactions.length),
+        shipmentId:shipment.id,
+        customer:shipment.customer,
+        method:shipment.method,
+        amount:shipment.amount,
+        status:shipment.payment
+    });
+
+    saveData();
+    this.reset();
+    renderDashboard();
+    showToast("New shipment created successfully!");
+    navigate("shipments");
+});
+
+function renderProfile(){
+    document.getElementById("profileName").value=profile.name||"";
+    document.getElementById("profileEmail").value=profile.email||"";
+    document.getElementById("profilePhone").value=profile.phone||"";
+    document.getElementById("profileCompany").value=profile.company||"";
+    document.getElementById("profileAddress").value=profile.address||"";
+
+    document.getElementById("profileDisplayName").textContent=profile.name||"User";
+    document.getElementById("profileAvatar").textContent=(profile.name||"U").charAt(0).toUpperCase();
+    document.getElementById("topAvatar").textContent=(profile.name||"U").charAt(0).toUpperCase();
+    document.getElementById("topName").textContent=profile.name||"User";
+}
+
+document.getElementById("profileForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    profile={
+        name:document.getElementById("profileName").value.trim(),
+        email:document.getElementById("profileEmail").value.trim(),
+        phone:document.getElementById("profilePhone").value.trim(),
+        company:document.getElementById("profileCompany").value.trim(),
+        address:document.getElementById("profileAddress").value.trim()
+    };
+    saveData();
+    renderProfile();
+    showToast("Your profile has been updated!");
+});
+
+// Initial setup
+saveData();
+renderProfile();
+renderDashboard();
+renderShipments();
+renderHistory();
+renderTransactions();
+</script>
+</body>
+</html>
